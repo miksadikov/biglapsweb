@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ device_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h2>{{ device_name }}</h2>
+    {% if error_message %}
+        <div class="error-message">
+            {{ error_message }}
+        </div>
+    {% endif %}
+    <div>
+        {% for param, value in params.items() %}
+            <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" class="param-form">
+                <div class="param">
+                    <label class="param-label">{{ param }}:</label>
+                    <input type="text" name="value" value="{{ value }}" class="param-input">
+                    <input type="hidden" name="param_name" value="{{ param }}">
+                    {% if param in ["Время съемки", "Интервал съемки", "Папка на сервере", "IP адрес сервера", "Телефон админа 1", "Телефон админа 2", "Диапазон температур нагревателя"] %}
+                        <button class="button" type="submit" name="action" value="read">Прочитать</button>
+                        <button class="button" type="submit" name="action" value="write">Записать</button>
+                    {% else %}
+                        <button class="button" type="submit" name="action" value="read">Прочитать</button>
+                    {% endif %}
+                </div>
+            </form>
+        {% endfor %}
+    </div>
+    <div class="heater-controls">
+        <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" style="display: inline;">
+            <button class="button" type="submit" name="heater_action" value="turn_on">Включить обогреватель</button>
+        </form>
+        <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" style="display: inline;">
+            <button class="button" type="submit" name="heater_action" value="turn_off">Выключить обогреватель</button>
+        </form>
+    </div>
+    <div class="test-photo">
+        <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}">
+            <button class="button" type="submit" name="test_photo" value="create">Сделать и скачать тестовое фото</button>
+        </form>
+    </div>
+    <div class="logs">
+        <a href="{{ url_for('log_page', log_id=1) }}" target="_blank">Лог 1</a>
+        <a href="{{ url_for('log_page', log_id=2) }}" target="_blank">Лог 2</a>
+    </div>
+
+    <script>
+        history.replaceState(null, '', '/');
+    </script>
+</body>
+</html>

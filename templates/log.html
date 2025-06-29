@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Лог {{ log_id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h2>Лог {{ log_id }}</h2>
+    {% for line in log_content %}
+        <p>{{ line }}</p>
+    {% endfor %}
+</body>
+</html>
+

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BigLaps</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta http-equiv="refresh" content="5"> <!-- Обновление страницы каждые 5 секунд -->
+</head>
+<body>
+    <h1>BigLaps</h1>
+    {% for device_id, device in devices.items() %}
+        <div class="device">
+            {% if device.connected %}
+                <a class="device-name" href="{{ url_for('device_page', device_id=device_id) }}">{{ device.name }}</a>
+                <span class="connected">Подключено</span>
+                <a href="{{ url_for('disconnect', device_id=device_id) }}"><button class="button">Отключить</button></a>
+            {% else %}
+                <span class="device-name">{{ device.name }}</span>
+                <span class="disconnected">Не подключено</span>
+                <button class="button" disabled>Отключить</button>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <div class="footer">Подключение к интернету: ОК</div>
+</body>
+</html>
+
+

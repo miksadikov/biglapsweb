@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: blue;
+}
+
+.device {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.device-name {
+    margin-right: 40px;
+}
+
+.connected, .disconnected {
+    font-weight: bold;
+    min-width: 120px;
+    margin-right: 40px;
+}
+
+.connected {
+    color: green;
+}
+
+.disconnected {
+    color: red;
+}
+
+.button {
+    padding: 5px 10px;
+    color: white;
+    background-color: blue;
+    border: none;
+    cursor: pointer;
+}
+
+.button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.footer {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.param {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.param-label {
+    width: 150px;
+    margin-right: 20px;
+}
+
+.param-input {
+    width: 200px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.param-form {
+    display: flex;
+    align-items: center;
+}
+
+.param-form .button {
+    margin-right: 10px;
+}
+
+.heater-controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.test-photo {
+    margin-top: 10px;
+}
+
+.logs {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+
