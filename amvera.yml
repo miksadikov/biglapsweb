@@ -1,8 +1,13 @@
+---
+version: null
 meta:
   environment: python
   toolchain:
     name: pip
+    version: latest
+build:
+  requirementsPath: requirements.txt
 run:
-  command: gunicorn --bind 0.0.0.0:$PORT --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker run:app
+  command: gunicorn --bind 0.0.0.0:$PORT --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --access-logfile /dev/null
+    run:app
   containerPort: 5000
-

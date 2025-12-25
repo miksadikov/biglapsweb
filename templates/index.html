@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BigLaps</title>
+    <title>BigLapse</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <meta http-equiv="refresh" content="5"> <!-- Обновление страницы каждые 5 секунд -->
 </head>
 <body>
-    <h1>BigLaps</h1>
-    {% for device_id, device in devices.items() %}
-        <div class="device">
-            {% if device.connected %}
-                <a class="device-name" href="{{ url_for('device_page', device_id=device_id) }}">{{ device.name }}</a>
-                <span class="connected">Подключено</span>
-                <a href="{{ url_for('disconnect', device_id=device_id) }}"><button class="button">Отключить</button></a>
-            {% else %}
-                <span class="device-name">{{ device.name }}</span>
-                <span class="disconnected">Не подключено</span>
-                <button class="button" disabled>Отключить</button>
-            {% endif %}
+    <div class="app">
+        <div class="container">
+            <!-- Шапка с логотипом -->
+            <header class="header">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    <div class="logo-text-group">
+                        <div class="logo-text">BigLapse</div>
+                        <div class="logo-subtitle">Система timelapse-съёмки</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Панель устройств -->
+            <main class="device-panel">
+                {% for device_id, device in devices.items() %}
+                    <div class="device-row">
+                        <div class="device-main">
+                            {% if device.connected %}
+                                <a class="device-name device-link"
+                                   href="{{ url_for('device_page', device_id=device_id) }}">
+                                    {{ device.name }}
+                                </a>
+                            {% else %}
+                                <span class="device-name">{{ device.name }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="device-meta">
+                            {% if device.connected %}
+                                <span class="status connected">Подключено</span>
+                                <a href="{{ url_for('disconnect', device_id=device_id) }}"
+                                   class="button disconnect-btn">
+                                    Отключить
+                                </a>
+                            {% else %}
+                                <span class="status disconnected">Не подключено</span>
+                                <button class="button disconnect-btn disabled" disabled>
+                                    Отключить
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </main>
+
+            <!-- Футер -->
+            <footer class="footer">
+                <span class="footer-dot"></span>
+                Подключение к интернету: <span class="footer-ok">ОК</span>
+            </footer>
         </div>
-    {% endfor %}
-    <div class="footer">Подключение к интернету: ОК</div>
+    </div>
 </body>
 </html>
-
-

@@ -5,49 +5,120 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h2>{{ device_name }}</h2>
-    {% if error_message %}
-        <div class="error-message">
-            {{ error_message }}
-        </div>
-    {% endif %}
-    <div>
-        {% for param, value in params.items() %}
-            <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" class="param-form">
-                <div class="param">
-                    <label class="param-label">{{ param }}:</label>
-                    <input type="text" name="value" value="{{ value }}" class="param-input">
-                    <input type="hidden" name="param_name" value="{{ param }}">
-                    {% if param in ["Время съемки", "Интервал съемки", "Папка на сервере", "IP адрес сервера", "Телефон админа 1", "Телефон админа 2", "Диапазон температур нагревателя"] %}
-                        <button class="button" type="submit" name="action" value="read">Прочитать</button>
-                        <button class="button" type="submit" name="action" value="write">Записать</button>
-                    {% else %}
-                        <button class="button" type="submit" name="action" value="read">Прочитать</button>
-                    {% endif %}
+<div class="app">
+    <div class="container device-container">
+        <!-- Шапка: логотип + название устройства -->
+        <header class="header device-header">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <div class="logo-text-group">
+                    <div class="logo-text">BigLapse</div>
+                    <div class="logo-subtitle">Устройство {{ device_id }}</div>
                 </div>
-            </form>
-        {% endfor %}
-    </div>
-    <div class="heater-controls">
-        <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" style="display: inline;">
-            <button class="button" type="submit" name="heater_action" value="turn_on">Включить обогреватель</button>
-        </form>
-        <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" style="display: inline;">
-            <button class="button" type="submit" name="heater_action" value="turn_off">Выключить обогреватель</button>
-        </form>
-    </div>
-    <div class="test-photo">
-        <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}">
-            <button class="button" type="submit" name="test_photo" value="create">Сделать и скачать тестовое фото</button>
-        </form>
-    </div>
-    <div class="logs">
-        <a href="{{ url_for('log_page', log_id=1) }}" target="_blank">Лог 1</a>
-        <a href="{{ url_for('log_page', log_id=2) }}" target="_blank">Лог 2</a>
-    </div>
+            </div>
+            <a href="{{ url_for('index') }}" class="back-link">← Ко всем устройствам</a>
+        </header>
 
-    <script>
-        history.replaceState(null, '', '/');
-    </script>
+        {% if error_message %}
+            <div class="error-message">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        <!-- Параметры устройства -->
+        <section class="card">
+            <h2 class="section-title">Параметры устройства</h2>
+
+            <table class="params-table">
+              {% for param, value in params.items() %}
+                <tr>
+                  <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}">
+                    <!-- Название параметра -->
+                    <td class="param-label">
+                      {{ param }}:
+                    </td>
+
+                    <!-- Поле ввода / отображения -->
+                    <td class="param-input">
+                      {% if param == 'Последние 5 фото' %}
+                        <textarea name="value" rows="5" readonly>{{ value }}</textarea>
+                        <input type="hidden" name="param_name" value="{{ param }}">
+                      {% else %}
+                        <input type="text"
+                               name="value"
+                               value="{{ value }}"
+                               {% if param in ['Последние 5 фото', 'Удалить все фото с флешки'] %}readonly{% endif %}>
+                        <input type="hidden" name="param_name" value="{{ param }}">
+                      {% endif %}
+                    </td>
+
+                    <!-- Кнопки -->
+                    <td class="param-buttons">
+                      {% if param == 'Удалить все фото с флешки' %}
+                        <button type="submit"
+                                name="action"
+                                value="delete_photos"
+                                class="button button-danger">
+                          Выполнить
+                        </button>
+
+                      {% elif param == 'Последние 5 фото' %}
+                        <button type="submit"
+                                name="action"
+                                value="read"
+                                class="button">
+                          Читать
+                        </button>
+
+                      {% else %}
+                        <button type="submit" name="action" value="read" class="button">
+                          Читать
+                        </button>
+                        <button type="submit" name="action" value="write" class="button">
+                          Записать
+                        </button>
+                      {% endif %}
+                    </td>
+                  </form>
+                </tr>
+              {% endfor %}
+            </table>
+        </section>
+
+        <!-- Управление нагревателем -->
+        <section class="card heater-control">
+            <h3 class="section-title">Управление нагревателем</h3>
+            <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}" class="heater-buttons">
+                <button class="button" type="submit" name="heater_action" value="turn_on">
+                    Включить нагреватель
+                </button>
+                <button class="button" type="submit" name="heater_action" value="turn_off">
+                    Выключить нагреватель
+                </button>
+            </form>
+        </section>
+
+        <!-- Тестовое фото -->
+        <section class="card test-photo">
+            <form method="POST" action="{{ url_for('device_page', device_id=device_id) }}">
+                <button class="button wide-btn" type="submit" name="test_photo" value="create">
+                    Сделать и скачать тестовое фото
+                </button>
+            </form>
+        </section>
+
+        <!-- Логи -->
+        <section class="logs">
+            <a href="{{ url_for('log_page', log_id=1) }}" target="_blank" class="log-link">Лог 1</a>
+            <a href="{{ url_for('log_page', log_id=2) }}" target="_blank" class="log-link">Лог 2</a>
+        </section>
+    </div>
+</div>
+
+<script>
+    /* убираем повторную отправку формы при обновлении страницы */
+    history.replaceState(null, '', window.location.pathname);
+</script>
 </body>
 </html>
+

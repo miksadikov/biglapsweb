@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 # Настройки клиента
-SERVER_URL = "wss://your-project-name.amvera.app"  # Замените на домен, предоставленный Amvera
+SERVER_URL = "wss://biglapsweb-samike.amvera.io"
 EVENTHANDLER_PATH = "/home/orangepi/nettools/eventhandler-net.sh"
 CLIENT_ID_PATH = "/home/orangepi/nettools/client_id.txt"
 LOG_FILE = "/tmp/client.log"
@@ -50,6 +50,7 @@ def command(data):
     elif command == 'read_param':
         param_name = command_data['param_name']
         cmd = f"Cmd=getparam={param_name.lower().replace(' ', '_')}"
+        put_to_log(cmd)
         response = subprocess.run([EVENTHANDLER_PATH, cmd], capture_output=True, text=True).stdout.strip()
         sio.emit('response', {'client_id': client_id, 'response': response, 'command': command, 'param_name': param_name})
 
